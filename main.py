@@ -1,13 +1,18 @@
 import os
 import discord
 from datetime import datetime, timedelta
-
-client = discord.Client()
+from os.path import join, dirname
+from dotenv import load_dotenv
 
 # 環境変数を取得
-SERVER_ID = os.environ['SERVER_ID']
-CHANNEL_ID = os.environ['CHANNEL_ID']
-DISCORD_BOT_TOKEN = os.environ['DISCORD_BOT_TOKEN']
+dotenv_path = join( dirname( __file__ ), '.env')
+load_dotenv( dotenv_path )
+
+SERVER_ID = os.environ.get('SERVER_ID')
+CHANNEL_ID = os.environ.get('CHANNEL_ID')
+DISCORD_BOT_TOKEN = os.environ.get('DISCORD_BOT_TOKEN')
+
+client = discord.Client()
 
 # メンバーのボイスチャンネル出入り時に実行される処理
 @client.event
