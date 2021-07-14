@@ -4,17 +4,22 @@ from datetime import datetime, timedelta
 
 client = discord.Client()
 
+# 環境変数を取得
+SERVER_ID = os.environ['SERVER_ID']
+CHANNEL_ID = os.environ['CHANNEL_ID']
+DISCORD_BOT_TOKEN = os.environ['DISCORD_BOT_TOKEN']
+
 # メンバーのボイスチャンネル出入り時に実行される処理
 @client.event
 async def on_voice_state_update( member, before, after ):
     # サーバーIDによる分岐
-    if member.guild.id == os.environ['SERVER_ID'] and ( before.channel != after.channel ):
+    if member.guild.id == SERVER_ID and ( before.channel != after.channel ):
 
         # 日本時間に合わせた状態の時刻を取得
         now = datetime.utcnow() + timedelta( hours = 9 )
 
         # 投稿するチャンネルIDを指定
-        alert_ch = client.get_channel( os.environ['CHANNEL_ID'] )
+        alert_ch = client.get_channel( CHANNEL_ID )
 
         # 入室通知
         if before.channel is None:
@@ -26,4 +31,4 @@ async def on_voice_state_update( member, before, after ):
             msg = f':arrow_backward: [{now:%m/%d %H:%M}] {member.name}がチャンネル[{before.channel.name}]から退出'
             await alert_ch.send( msg )
 
-client.run( os.environ['DISCORD_BOT_TOKEN'] )
+client.run( DISCORD_BOT_TOKEN )
